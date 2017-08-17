@@ -10,6 +10,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
+import java.io.File;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,36 +36,78 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                /** One time initialization: */
+
+                //BUILD INPUT DATA - https://stackoverflow.com/questions/40074840/reading-a-csv-file-into-a-array/40075446#40075446
+
+//                AssetManager am = getAssets();
+//
+//                String fileName= "test_mfcc_0.csv";
+//                File file= new File(fileName);
+//
+//                // this gives you a 2-dimensional array of strings
+//                List<List<String>> lines = new ArrayList<>();
+//                Scanner inputStream;
+//
+//                try{
+//                    inputStream = new Scanner(file);
+//                    while(inputStream.hasNext()){
+//                        String line= inputStream.next();
+//                        String[] values = line.split(",");
+//                        // this adds the currently parsed line to the 2-dimensional string array
+//                        lines.add(Arrays.asList(values));
+//                    }
+//                    inputStream.close();
+//                }catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                // the following code lets you iterate through the 2-dimensional array
+//                int lineNo = 1;
+//                for(List<String> line: lines) {
+//                    int columnNo = 1;
+//                    for (String value: line) {
+//                        System.out.println("Line " + lineNo + " Column " + columnNo + ": " + value);
+//                        columnNo++;
+//                    }
+//                    lineNo++;
+//                }
+//
+//                System.out.println(lines);
+
+
+//
+//
+//                /** One time initialization: */
                 TensorFlowInferenceInterface tensorflow = new TensorFlowInferenceInterface();
                 tensorflow.initializeTensorFlow(getAssets(), "file:///android_asset/constant_graph_weights.pb");
+//
+//                /** Continuous inference (floats used in example, can be any primitive): */
+//                //#the_input
+//                //#output_node0
+//
+//                double[][][] arr=new double[1][234][26];
+//
+//                for(int i=0;i<234;i++){
+//                    for(int j=0;j<26;j++){
+//                        arr[0][i][j] = 1.0;
+//                    }
+//
+//                }
+//
+//
+//
+//                System.out.println(arr);
 
-                /** Continuous inference (floats used in example, can be any primitive): */
-                //#the_input
-                //#output_node0
 
-                double[][][] arr=new double[1][234][26];
-
-                for(int i=0;i<234;i++){
-                    for(int j=0;j<26;j++){
-                        arr[0][i][j] = 1.0;
-                    }
-
-                }
-
-                System.out.println(arr);
-
-                input = arr;
-                INPUT_SHAPE =
 
                 // loading new input
-                tensorflow.fillNodeFloat("the_input", INPUT_SHAPE, input); // INPUT_SHAPE is an int[] of expected shape, input is a float[] with the input data
-
-                // running inference for given input and reading output
-                String outputNode = "output_node0";
-                String[] outputNodes = {outputNode};
-                tensorflow.runInference(outputNodes);
-                tensorflow.readNodeFloat(outputNode, output); // output is a preallocated float[] in the size of the expected output vector
+//                tensorflow.fillNodeFloat("the_input", INPUT_SHAPE, input); // INPUT_SHAPE is an int[] of expected shape, input is a float[] with the input data
+//
+//                // running inference for given input and reading output
+//                String outputNode = "output_node0";
+//                String[] outputNodes = {outputNode};
+//                tensorflow.runInference(outputNodes);
+//                tensorflow.readNodeFloat(outputNode, output); // output is a preallocated float[] in the size of the expected output vector
 
 
 
@@ -92,3 +142,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
