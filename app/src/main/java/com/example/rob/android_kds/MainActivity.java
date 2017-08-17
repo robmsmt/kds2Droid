@@ -9,11 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import org.tensorflow.contrib.android.TensorFlowInferenceInterface;
+
 import java.io.File;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,51 +38,42 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputStream csvStream = getResources().openRawResource(R.raw.test_mfcc_0);
+
+                // this gives you a 2-dimensional array of strings
+                List<List<String>> lines = new ArrayList<>();
+                Scanner inputStream;
+
+                try {
+                    inputStream = new Scanner(csvStream);
+                    while (inputStream.hasNext()) {
+                        String line = inputStream.next();
+                        String[] values = line.split(",");
+                        // this adds the currently parsed line to the 2-dimensional string array
+                        lines.add(Arrays.asList(values));
+                    }
+                    inputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // the following code lets you iterate through the 2-dimensional array
+                int lineNo = 1;
+                for (List<String> line : lines) {
+                    int columnNo = 1;
+                    for (String value : line) {
+                        System.out.println("Line " + lineNo + " Column " + columnNo + ": " + value);
+                        columnNo++;
+                    }
+                    lineNo++;
+                }
+
+                System.out.println(lines);
 
 
-                //BUILD INPUT DATA - https://stackoverflow.com/questions/40074840/reading-a-csv-file-into-a-array/40075446#40075446
-
-//                AssetManager am = getAssets();
-//
-//                String fileName= "test_mfcc_0.csv";
-//                File file= new File(fileName);
-//
-//                // this gives you a 2-dimensional array of strings
-//                List<List<String>> lines = new ArrayList<>();
-//                Scanner inputStream;
-//
-//                try{
-//                    inputStream = new Scanner(file);
-//                    while(inputStream.hasNext()){
-//                        String line= inputStream.next();
-//                        String[] values = line.split(",");
-//                        // this adds the currently parsed line to the 2-dimensional string array
-//                        lines.add(Arrays.asList(values));
-//                    }
-//                    inputStream.close();
-//                }catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // the following code lets you iterate through the 2-dimensional array
-//                int lineNo = 1;
-//                for(List<String> line: lines) {
-//                    int columnNo = 1;
-//                    for (String value: line) {
-//                        System.out.println("Line " + lineNo + " Column " + columnNo + ": " + value);
-//                        columnNo++;
-//                    }
-//                    lineNo++;
-//                }
-//
-//                System.out.println(lines);
-
-
-//
-//
 //                /** One time initialization: */
-                TensorFlowInferenceInterface tensorflow = new TensorFlowInferenceInterface();
-                tensorflow.initializeTensorFlow(getAssets(), "file:///android_asset/constant_graph_weights.pb");
+//                TensorFlowInferenceInterface tensorflow = new TensorFlowInferenceInterface();
+//                tensorflow.initializeTensorFlow(getAssets(), "file:///android_asset/constant_graph_weights.pb");
 //
 //                /** Continuous inference (floats used in example, can be any primitive): */
 //                //#the_input
@@ -99,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
 //                System.out.println(arr);
 
 
-
                 // loading new input
 //                tensorflow.fillNodeFloat("the_input", INPUT_SHAPE, input); // INPUT_SHAPE is an int[] of expected shape, input is a float[] with the input data
 //
@@ -110,12 +103,8 @@ public class MainActivity extends AppCompatActivity {
 //                tensorflow.readNodeFloat(outputNode, output); // output is a preallocated float[] in the size of the expected output vector
 
 
-
-
             }
         });
-
-
 
 
     }
