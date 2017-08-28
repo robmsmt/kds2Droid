@@ -86,12 +86,36 @@ public class MainActivity extends AppCompatActivity {
 //
 //                }
 
-                float[] arr=new float[6084];
-                float[] output=new float[6786];
+                float[] arr=new float[18252];
+
 
                 // the following code lets you iterate through the 2-dimensional array
                 int lineNo = 0;
                 int index = 0;
+                for (List<String> line : lines) {
+                    int columnNo = 0;
+                    for (String value : line) {
+
+                        arr[index] = Float.parseFloat(value);
+                        columnNo++;
+                        index++;
+                    }
+                    lineNo++;
+                }
+                lineNo = 0;
+                index = 0;
+                for (List<String> line : lines) {
+                    int columnNo = 0;
+                    for (String value : line) {
+
+                        arr[index] = Float.parseFloat(value);
+                        columnNo++;
+                        index++;
+                    }
+                    lineNo++;
+                }
+                lineNo = 0;
+                index = 0;
                 for (List<String> line : lines) {
                     int columnNo = 0;
                     for (String value : line) {
@@ -122,8 +146,9 @@ public class MainActivity extends AppCompatActivity {
                 // Copy the input data into TensorFlow.
                 System.out.println("inputNode");
                 Trace.beginSection("fillNodeFloat");
+                //input is 3x234x26
                 tensorflow.fillNodeFloat(
-                        "the_input", new int[]{1 * 234 * 26}, arr);
+                        "the_input", new int[]{3 * 234 * 26}, arr);
                 Trace.endSection();
 
 //                // Run the inference call.
@@ -137,7 +162,13 @@ public class MainActivity extends AppCompatActivity {
                 // Copy the output Tensor back into the output array.
                 System.out.println("readOutput");
                 Trace.beginSection("readNodeFloat");
-                tensorflow.readNodeFloat(outputNode, output); // output is a preallocated float[] in the size of the expected output vector
+//                tensorflow.fillNodeFloat(
+//                        "output_node0", new int[]{3 * 234 * 29}, output);
+//                float[][][] output=new float[3][234][29];
+                //output should be batchxtimex29 (3 x 234 x 29) = 20358 flattened array
+                float[] output=new float[20358];
+
+                tensorflow.readNodeFloat(outputNode, output); // ERROR HERE
                 Trace.endSection();
 
 
